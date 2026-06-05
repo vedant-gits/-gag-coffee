@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAG Coffee Co. — GIFT City, Gandhinagar</title>
+<meta name="description" content="GAG Coffee Co. in GIFT City, Gandhinagar. Specialty coffee, Vietnamese cold brew, seasonal beverages & fresh bakes. Open daily 11AM–12AM.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f7f2e8;--cream2:#ede5d0;--cream3:#e0d4b8;
+  --brown:#5c3d1e;--brown2:#7a5230;--brown3:#3a2410;
+  --gold:#b8864e;--gold2:#d4a96a;
+  --text:#2a1a0a;--text2:#6b4c2a;--text3:#9a7a55;
+  --red:#c0392b;--red-bg:#fdf0ee;--wa:#25D366;
+  --sidebar:220px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);display:flex}
+
+#sidebar{width:var(--sidebar);flex-shrink:0;background:var(--brown3);display:flex;flex-direction:column;height:100vh;position:fixed;left:0;top:0;z-index:100;transition:transform .3s ease}
+.sidebar-logo{padding:2rem 1.5rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-logo-text{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--cream);letter-spacing:3px;font-weight:600;display:block}
+.sidebar-logo-sub{font-size:.62rem;color:var(--gold2);letter-spacing:2px;text-transform:uppercase;margin-top:.3rem;font-weight:300;display:block}
+.sidebar-nav{flex:1;padding:1.25rem 0;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:.75rem;padding:.85rem 1.5rem;cursor:pointer;transition:all .2s;color:rgba(247,242,232,.5);font-size:.75rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;border-left:3px solid transparent}
+.nav-item:hover{color:var(--cream2);background:rgba(255,255,255,.05)}
+.nav-item.active{color:var(--gold2);border-left-color:var(--gold2);background:rgba(184,134,78,.1)}
+.nav-item-icon{font-size:1.1rem;width:20px;text-align:center}
+.nav-item-badge{margin-left:auto;background:var(--gold);color:var(--brown3);font-size:.58rem;padding:.15rem .4rem;letter-spacing:1px}
+.sidebar-footer{padding:1.25rem 1.5rem;border-top:1px solid rgba(255,255,255,.08)}
+.sidebar-hours{font-size:.68rem;color:rgba(247,242,232,.35);letter-spacing:1.5px;line-height:1.7;font-weight:300}
+.sidebar-hours strong{color:var(--gold2);display:block;margin-bottom:.2rem;font-weight:500}
+.sidebar-wa{display:flex;align-items:center;gap:.5rem;background:var(--wa);color:#fff;padding:.6rem 1rem;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;font-weight:500;margin-top:.85rem;transition:background .2s}
+.sidebar-wa:hover{background:#1da851}
+.sidebar-ig{display:flex;align-items:center;gap:.5rem;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;padding:.6rem 1rem;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;font-weight:500;margin-top:.5rem;transition:opacity .2s}
+.sidebar-ig:hover{opacity:.85}
+
+#main{margin-left:var(--sidebar);flex:1;height:100vh;overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;opacity:0;pointer-events:none;transform:translateX(24px);transition:opacity .35s ease,transform .35s ease}
+.page.active{opacity:1;pointer-events:auto;transform:none}
+.page.exit{opacity:0;transform:translateX(-24px)}
+
+.page-header{padding:3rem 3rem 1.5rem;border-bottom:1px solid var(--cream3);background:var(--cream);position:sticky;top:0;z-index:10}
+.page-header-eyebrow{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.4rem}
+.page-header h1{font-family:'Cormorant Garamond',serif;font-size:2.6rem;color:var(--brown3);font-weight:300;line-height:1.1}
+.page-header h1 em{color:var(--gold);font-style:italic}
+.page-header p{color:var(--text3);font-weight:300;font-size:.9rem;margin-top:.5rem;max-width:520px;line-height:1.8}
+.page-body{padding:2.5rem 3rem}
+
+/* HOME */
+.home-hero{min-height:calc(100vh - 0px);display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;padding:4rem 3rem}
+.hero-eyebrow{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem}
+.eyebrow-line{width:40px;height:1px;background:var(--gold)}
+.eyebrow-text{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:500}
+.home-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,4.5vw,5rem);line-height:1;color:var(--brown3);font-weight:300;margin-bottom:1.5rem}
+.home-hero h1 em{color:var(--gold);font-style:italic}
+.home-hero h1 strong{font-weight:600}
+.hero-sub{font-size:1rem;color:var(--text2);max-width:400px;line-height:1.9;font-weight:300;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.75rem;font-size:.73rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .25s;cursor:pointer;font-family:'Jost',sans-serif;border:none;font-weight:500}
+.btn-dark{background:var(--brown3);color:var(--cream)}
+.btn-dark:hover{background:var(--gold);color:var(--brown3)}
+.btn-outline{background:transparent;color:var(--brown3);border:1px solid var(--brown3)}
+.btn-outline:hover{background:var(--brown3);color:var(--cream)}
+.btn-wa{background:var(--wa);color:#fff}
+.btn-wa:hover{background:#1da851}
+.hero-visual-wrap{display:flex;justify-content:center}
+.hero-card{background:var(--cream2);border:1px solid var(--cream3);padding:3rem 2.5rem;text-align:center;position:relative;width:300px}
+.hero-card::before{content:'';position:absolute;top:-12px;right:-12px;width:100%;height:100%;border:1px solid var(--cream3);z-index:-1}
+.big-cup{font-size:5rem;display:block;margin-bottom:1.25rem;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+.hero-rating{display:flex;align-items:center;gap:.5rem;justify-content:center}
+.stars-gold{color:var(--gold);font-size:.95rem;letter-spacing:2px}
+.rating-text{font-size:.8rem;color:var(--text2);font-weight:300}
+.hero-badge{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:var(--brown3);color:var(--cream);padding:.5rem 1.25rem;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.home-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cream3);border:1px solid var(--cream3);margin:0 3rem 3rem}
+.quick-item{background:var(--cream);padding:1.5rem;text-align:center}
+.quick-icon{font-size:1.5rem;display:block;margin-bottom:.5rem}
+.quick-label{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--text3);font-weight:500}
+.quick-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--brown3);margin-top:.2rem}
+.ticker{background:var(--brown3);color:var(--cream2);padding:.65rem 0;overflow:hidden}
+.ticker-inner{display:flex;gap:3rem;animation:ticker 24s linear infinite;white-space:nowrap}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;font-weight:300}
+.ticker-dot{color:var(--gold2);margin:0 .5rem}
+
+/* MENU */
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--cream3);border:1px solid var(--cream3)}
+.menu-card{background:var(--cream);padding:2rem 1.75rem;transition:all .35s;cursor:default;position:relative;overflow:hidden}
+.menu-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:0;background:var(--brown3);transition:height .35s ease;z-index:0}
+.menu-card:hover::after{height:100%}
+.menu-card-icon,.menu-card-name,.menu-card-desc,.menu-card-price{position:relative;z-index:1;transition:color .35s}
+.menu-card:hover .menu-card-name,.menu-card:hover .menu-card-desc{color:var(--cream)!important}
+.menu-card:hover .menu-card-price{color:var(--gold2)!important}
+.menu-card-icon{font-size:2rem;display:block;margin-bottom:1rem}
+.menu-card-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--brown3);margin-bottom:.4rem;font-weight:400}
+.menu-card-desc{font-size:.8rem;color:var(--text3);line-height:1.7;font-weight:300}
+.menu-card-price{display:inline-block;margin-top:1rem;font-size:1rem;color:var(--gold);font-family:'Cormorant Garamond',serif}
+.menu-cats{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
+.menu-cat-btn{padding:.45rem 1.1rem;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--cream3);background:var(--cream);color:var(--text2);cursor:pointer;font-family:'Jost',sans-serif;font-weight:500;transition:all .2s}
+.menu-cat-btn.active,.menu-cat-btn:hover{background:var(--brown3);color:var(--cream);border-color:var(--brown3)}
+
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:220px 220px;gap:8px}
+.gallery-item{background:var(--cream3);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+.gallery-item:first-child{grid-row:1/3;grid-column:1}
+.gallery-emoji{font-size:3rem;opacity:.3;pointer-events:none}
+.gallery-item:first-child .gallery-emoji{font-size:4.5rem}
+.gallery-item img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:block;transition:transform .5s ease}
+.gallery-item:hover img{transform:scale(1.06)}
+.gallery-overlay{position:absolute;inset:0;background:var(--brown3);opacity:0;transition:opacity .3s;display:flex;align-items:center;justify-content:center;z-index:2}
+.gallery-item:hover .gallery-overlay{opacity:.75}
+.gallery-overlay-text{color:var(--cream);font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:500}
+.gallery-note{margin-top:1.5rem;font-size:.78rem;color:var(--text3);font-style:italic;font-weight:300}
+
+/* ORDER */
+.order-layout{display:grid;grid-template-columns:1fr 380px;gap:2.5rem;align-items:start}
+.order-form-wrap{background:var(--cream);border:1px solid var(--cream3);padding:2.5rem}
+.order-sidebar-card{position:sticky;top:0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1rem}
+.form-group label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);font-weight:500}
+.form-group input,.form-group select,.form-group textarea{background:var(--cream2);border:1px solid var(--cream3);padding:.7rem .9rem;font-family:'Jost',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border .2s;-webkit-appearance:none;border-radius:0;width:100%}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold)}
+.form-group textarea{resize:vertical;min-height:80px}
+.order-items-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);font-weight:500;display:block;margin-bottom:.6rem}
+.order-items{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.5rem}
+.order-item{display:flex;align-items:center;gap:.65rem;padding:.65rem .9rem;background:var(--cream2);border:1px solid var(--cream3);cursor:pointer;transition:border-color .2s,background .2s;user-select:none}
+.order-item:hover{border-color:var(--gold);background:var(--cream)}
+.order-item input[type=checkbox]{accent-color:var(--brown3);width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.order-item-name{font-size:.8rem;color:var(--text);font-weight:500}
+.order-item-price{font-size:.74rem;color:var(--gold);font-family:'Cormorant Garamond',serif}
+.order-total-bar{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;background:var(--brown3);color:var(--cream);margin-bottom:1.25rem}
+.total-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:300}
+.total-amount{font-family:'Cormorant Garamond',serif;font-size:1.5rem}
+.order-actions{display:flex;flex-direction:column;gap:.45rem}
+.btn-submit{width:100%;padding:.95rem;background:var(--brown3);color:var(--cream);border:none;font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background .25s;font-weight:500}
+.btn-submit:hover:not(:disabled){background:var(--gold);color:var(--brown3)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed}
+.order-or{text-align:center;font-size:.68rem;color:var(--text3);letter-spacing:1px;padding:.15rem 0}
+.btn-wa-order{width:100%;padding:.95rem;background:var(--wa);color:#fff;border:none;font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .25s;font-weight:500;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-wa-order:hover{background:#1da851}
+.error-msg{color:var(--red);font-size:.78rem;display:none;margin-bottom:1rem;padding:.55rem .9rem;background:var(--red-bg);border-left:3px solid var(--red)}
+.order-success{display:none;text-align:center;padding:2.5rem 1rem}
+.big-check{font-size:2.8rem;display:block;margin-bottom:1rem;animation:pop .4s cubic-bezier(.17,.67,.4,1.3)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.order-success h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--brown3);margin-bottom:.75rem;font-weight:300}
+.order-success p{color:var(--text3);font-weight:300;font-size:.88rem;line-height:1.7;margin-bottom:1.25rem}
+.wa-followup{display:inline-flex;align-items:center;gap:.5rem;background:var(--wa);color:#fff;padding:.65rem 1.4rem;text-decoration:none;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;transition:background .25s;font-weight:500}
+.wa-followup:hover{background:#1da851}
+.order-summary-card{background:var(--cream2);border:1px solid var(--cream3);padding:1.75rem}
+.summary-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--brown3);margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--cream3)}
+.summary-empty{font-size:.82rem;color:var(--text3);font-style:italic;font-weight:300;text-align:center;padding:1rem 0}
+.summary-list{display:flex;flex-direction:column;gap:.5rem;min-height:60px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem}
+.summary-row-name{color:var(--text2);font-weight:400}
+.summary-row-price{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:.95rem}
+.summary-divider{border:none;border-top:1px solid var(--cream3);margin:.75rem 0}
+.summary-total-row{display:flex;justify-content:space-between;align-items:center}
+.summary-total-label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);font-weight:500}
+.summary-total-val{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--brown3)}
+.order-info-card{background:var(--brown3);padding:1.5rem;margin-top:1rem}
+.order-info-card h4{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);margin-bottom:.75rem;font-weight:500}
+.order-info-card p{font-size:.78rem;color:rgba(247,242,232,.55);line-height:1.7;font-weight:300}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.about-visual{background:var(--cream2);border:1px solid var(--cream3);padding:2.5rem;text-align:center;position:relative}
+.about-visual::after{content:'';position:absolute;bottom:-10px;right:-10px;width:100%;height:100%;border:1px solid var(--cream3);z-index:-1}
+.about-big-icon{font-size:4.5rem;display:block;margin-bottom:1.5rem}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream3);border:1px solid var(--cream3);margin-top:1.75rem}
+.about-stat{text-align:center;padding:1.1rem 1rem;background:var(--cream2)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--gold);display:block;font-weight:300}
+.stat-label{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-top:.2rem;font-weight:500}
+.about-text-section h2{font-family:'Cormorant Garamond',serif;font-size:2.2rem;color:var(--brown3);font-weight:300;margin-bottom:1.25rem}
+.about-text-section h2 em{color:var(--gold);font-style:italic}
+.about-text-section p{color:var(--text2);line-height:1.9;font-weight:300;margin-bottom:1rem;font-size:.95rem}
+.about-values{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--cream3);border:1px solid var(--cream3);margin-top:2rem}
+.value-item{background:var(--cream);padding:1.5rem 1.25rem;text-align:center}
+.value-icon{font-size:1.5rem;display:block;margin-bottom:.65rem}
+.value-title{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--brown3);font-weight:500;margin-bottom:.35rem}
+.value-desc{font-size:.78rem;color:var(--text3);font-weight:300;line-height:1.6}
+
+/* REVIEWS */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem}
+.testi-card{background:var(--cream2);border:1px solid var(--cream3);padding:1.75rem;transition:transform .3s,box-shadow .3s}
+.testi-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(58,36,16,.07)}
+.testi-stars{color:var(--gold);font-size:.85rem;letter-spacing:3px;margin-bottom:.9rem}
+.testi-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text2);line-height:1.8;font-style:italic;margin-bottom:1.1rem;font-weight:300}
+.testi-author{font-size:.68rem;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;font-weight:500}
+.rating-summary{display:flex;align-items:center;gap:2rem;background:var(--brown3);padding:2rem;margin-bottom:2rem}
+.rating-big{font-family:'Cormorant Garamond',serif;font-size:4rem;color:var(--gold);font-weight:300;line-height:1}
+.rating-details{flex:1}
+.rating-stars-big{color:var(--gold2);font-size:1.1rem;letter-spacing:4px;display:block;margin-bottom:.35rem}
+.rating-count{font-size:.72rem;color:rgba(247,242,232,.45);letter-spacing:1.5px;text-transform:uppercase;font-weight:300}
+.rating-cta{display:flex;flex-direction:column;gap:.5rem;align-items:flex-end}
+.rating-cta p{font-size:.72rem;color:rgba(247,242,232,.5);font-weight:300;text-align:right}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem}
+.contact-info-card{background:var(--brown3);padding:2.5rem;height:fit-content}
+.contact-info-card h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--cream);font-weight:300;margin-bottom:1.5rem}
+.contact-info-card h2 em{color:var(--gold2);font-style:italic}
+.contact-detail{display:flex;flex-direction:column;gap:1.25rem}
+.contact-item{display:flex;gap:.9rem;align-items:flex-start}
+.contact-icon{font-size:1rem;margin-top:.1rem}
+.contact-item h4{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);margin-bottom:.25rem;font-weight:500}
+.contact-item p,.contact-item a{font-size:.85rem;color:rgba(247,242,232,.6);font-weight:300;line-height:1.6;text-decoration:none;transition:color .25s}
+.contact-item a:hover{color:var(--gold2)}
+.contact-action-btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem}
+.contact-form-card{background:var(--cream);border:1px solid var(--cream3);padding:2.5rem}
+.contact-form-card h3{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--brown3);font-weight:300;margin-bottom:1.5rem}
+.contact-form-wrap{display:flex;flex-direction:column;gap:.9rem}
+.contact-form-wrap label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);font-weight:500}
+.contact-form-wrap input,.contact-form-wrap textarea{background:var(--cream2);border:1px solid var(--cream3);padding:.75rem .9rem;font-family:'Jost',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border .2s;border-radius:0;width:100%}
+.contact-form-wrap input:focus,.contact-form-wrap textarea:focus{border-color:var(--gold)}
+.contact-form-wrap textarea{resize:vertical;min-height:110px}
+.btn-contact{background:var(--brown3);color:var(--cream);border:none;padding:.85rem 1.75rem;font-family:'Jost',sans-serif;font-size:.73rem;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:all .25s;font-weight:500;align-self:flex-start}
+.btn-contact:hover:not(:disabled){background:var(--gold);color:var(--brown3)}
+.btn-contact:disabled{opacity:.6;cursor:not-allowed}
+.contact-success-box{display:none;padding:1.25rem;background:rgba(184,134,78,.1);border:1px solid var(--gold)}
+.contact-success-box p{color:var(--brown3);font-size:.88rem;font-weight:300}
+.contact-error-msg{color:var(--red);font-size:.78rem;display:none}
+.map-embed{border:1px solid var(--cream3);overflow:hidden;margin-top:1.5rem}
+.map-embed iframe{width:100%;height:240px;border:none;display:block}
+.map-embed-label{background:var(--cream2);padding:.6rem 1rem;font-size:.68rem;letter-spacing:1.5px;color:var(--text3);display:flex;justify-content:space-between;align-items:center}
+.map-embed-label a{color:var(--gold);text-decoration:none;font-weight:500}
+
+/* ── ADMIN DASHBOARD ─────────────────────────────── */
+#page-admin{background:var(--cream)}
+.admin-login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
+.admin-login-card{background:var(--cream);border:1px solid var(--cream3);padding:3rem;width:100%;max-width:420px;text-align:center}
+.admin-login-card h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--brown3);font-weight:300;margin-bottom:.4rem}
+.admin-login-card p{font-size:.82rem;color:var(--text3);margin-bottom:2rem;font-weight:300}
+.admin-login-fields{display:flex;flex-direction:column;gap:.85rem;text-align:left}
+.admin-login-fields label{font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:var(--text2);font-weight:500}
+.admin-login-fields input{background:var(--cream2);border:1px solid var(--cream3);padding:.7rem .9rem;font-family:'Jost',sans-serif;font-size:.9rem;color:var(--text);outline:none;border-radius:0;width:100%;transition:border .2s}
+.admin-login-fields input:focus{border-color:var(--gold)}
+.btn-admin-login{width:100%;padding:.95rem;background:var(--brown3);color:var(--cream);border:none;font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background .25s;font-weight:500;margin-top:.5rem}
+.btn-admin-login:hover:not(:disabled){background:var(--gold);color:var(--brown3)}
+.btn-admin-login:disabled{opacity:.6;cursor:not-allowed}
+.admin-login-err{color:var(--red);font-size:.8rem;margin-top:.5rem;display:none}
+
+.admin-panel{display:none;padding:2.5rem 3rem;overflow-y:auto;height:100%}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--cream3)}
+.admin-topbar h2{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--brown3);font-weight:300}
+.admin-topbar h2 em{color:var(--gold);font-style:italic}
+.btn-logout{background:none;border:1px solid var(--cream3);color:var(--text2);padding:.45rem .9rem;font-family:'Jost',sans-serif;font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;font-weight:500}
+.btn-logout:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--cream3);border:1px solid var(--cream3);margin-bottom:2rem}
+.stat-tile{background:var(--cream);padding:1.5rem;text-align:center}
+.stat-tile-num{font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--gold);display:block;font-weight:300}
+.stat-tile-label{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-top:.25rem;font-weight:500}
+.admin-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem}
+.admin-tab{padding:.45rem 1.1rem;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--cream3);background:var(--cream);color:var(--text2);cursor:pointer;font-family:'Jost',sans-serif;font-weight:500;transition:all .2s}
+.admin-tab.active,.admin-tab:hover{background:var(--brown3);color:var(--cream);border-color:var(--brown3)}
+.admin-table-wrap{border:1px solid var(--cream3);overflow:hidden;overflow-x:auto}
+.admin-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.admin-table th{background:var(--brown3);color:var(--cream2);padding:.8rem 1rem;text-align:left;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;white-space:nowrap}
+.admin-table td{padding:.85rem 1rem;border-bottom:1px solid var(--cream3);color:var(--text2);vertical-align:top}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:var(--cream2)}
+.status-badge{display:inline-block;padding:.2rem .65rem;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;border-radius:0}
+.status-pending{background:#fff8e6;color:#b87c00}
+.status-confirmed{background:#e6f0ff;color:#1a4fa0}
+.status-ready{background:#e6fff0;color:#0a7a3c}
+.status-completed{background:var(--cream2);color:var(--text3)}
+.status-cancelled{background:var(--red-bg);color:var(--red)}
+.status-select{background:var(--cream2);border:1px solid var(--cream3);padding:.3rem .6rem;font-family:'Jost',sans-serif;font-size:.75rem;color:var(--text);outline:none;border-radius:0;cursor:pointer}
+.status-select:focus{border-color:var(--gold)}
+.admin-loading{text-align:center;padding:2rem;color:var(--text3);font-style:italic;font-size:.88rem}
+.admin-empty{text-align:center;padding:2.5rem;color:var(--text3);font-style:italic;font-size:.88rem}
+.top-items-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--cream3);border:1px solid var(--cream3)}
+.top-item{background:var(--cream);padding:1.1rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
+.top-item-name{font-size:.82rem;color:var(--text2);font-weight:400}
+.top-item-count{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold)}
+.admin-section-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--brown3);font-weight:300;margin:1.75rem 0 1rem}
+
+/* FLOAT */
+.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:52px;height:52px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.4);text-decoration:none;font-size:1.4rem;transition:transform .25s,box-shadow .25s;animation:wapulse 2.5s ease-in-out infinite}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 6px 24px rgba(37,211,102,.6)}
+@keyframes wapulse{0%,100%{box-shadow:0 4px 18px rgba(37,211,102,.4)}50%{box-shadow:0 4px 28px rgba(37,211,102,.7)}}
+.ig-float{position:fixed;bottom:5.5rem;right:1.5rem;z-index:300;width:52px;height:52px;border-radius:50%;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(220,39,67,.35);text-decoration:none;font-size:1.4rem;transition:transform .25s,box-shadow .25s}
+.ig-float:hover{transform:scale(1.1)}
+
+.mobile-toggle{display:none;position:fixed;top:1rem;left:1rem;z-index:200;background:var(--brown3);color:var(--cream);border:none;padding:.55rem .7rem;font-size:1rem;cursor:pointer;line-height:1}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+
+/* API STATUS INDICATOR */
+.api-status{display:flex;align-items:center;gap:.4rem;font-size:.65rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(247,242,232,.3);margin-top:.6rem;font-weight:300}
+.api-dot{width:7px;height:7px;border-radius:50%;background:#888;flex-shrink:0;transition:background .4s}
+.api-dot.online{background:#4caf50;box-shadow:0 0 6px rgba(76,175,80,.5)}
+.api-dot.offline{background:#888}
+
+@media(max-width:900px){
+  :root{--sidebar:220px}
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:none}
+  #main{margin-left:0}
+  .mobile-toggle{display:block}
+  .sidebar-overlay{display:block}
+  .sidebar-overlay.hidden{display:none}
+  .home-hero{grid-template-columns:1fr;padding:4rem 1.5rem 2rem}
+  .hero-visual-wrap{display:none}
+  .home-quick{margin:0 1.5rem 2rem}
+  .page-header{padding:2rem 1.5rem 1.25rem}
+  .page-body{padding:1.75rem 1.5rem}
+  .order-layout{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .gallery-item:first-child{grid-row:auto;grid-column:auto}
+  .form-row{grid-template-columns:1fr}
+  .order-items{grid-template-columns:1fr}
+  .about-values{grid-template-columns:1fr}
+  .admin-stats{grid-template-columns:1fr 1fr}
+  .admin-panel{padding:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<button class="mobile-toggle" id="mobileToggle" aria-label="Open menu">☰</button>
+<div class="sidebar-overlay hidden" id="sidebarOverlay"></div>
+
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <span class="sidebar-logo-text">GAG COFFEE Co.</span>
+    <span class="sidebar-logo-sub">GIFT City · Est. 2024</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-page="home"><span class="nav-item-icon">🏠</span> Home</div>
+    <div class="nav-item" data-page="menu"><span class="nav-item-icon">☕</span> Menu</div>
+    <div class="nav-item" data-page="order"><span class="nav-item-icon">📋</span> Order Ahead<span class="nav-item-badge">NEW</span></div>
+    <div class="nav-item" data-page="gallery"><span class="nav-item-icon">📸</span> Gallery</div>
+    <div class="nav-item" data-page="reviews"><span class="nav-item-icon">⭐</span> Reviews</div>
+    <div class="nav-item" data-page="about"><span class="nav-item-icon">☘️</span> About Us</div>
+    <div class="nav-item" data-page="contact"><span class="nav-item-icon">📍</span> Contact & Map</div>
+    <div class="nav-item" data-page="admin"><span class="nav-item-icon">🔐</span> Admin</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-hours"><strong>Hours</strong>Open Daily · 11:00 AM – 12:00 AM</div>
+    <div class="api-status"><div class="api-dot" id="apiDot"></div><span id="apiStatusText">Checking API...</span></div>
+    <a class="sidebar-wa" href="https://wa.me/917874337305?text=Hi%20GAG%20Coffee!" target="_blank" rel="noopener">💬 Chat on WhatsApp</a>
+    <a class="sidebar-ig" href="https://www.instagram.com/gagcoffeeco_india/" target="_blank" rel="noopener">📸 Follow on Instagram</a>
+  </div>
+</aside>
+
+<main id="main">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="ticker"><div class="ticker-inner"><span class="ticker-item">Vietnamese Coffee</span><span class="ticker-dot">✦</span><span class="ticker-item">Seasonal Beverages</span><span class="ticker-dot">✦</span><span class="ticker-item">Almond Croissants</span><span class="ticker-dot">✦</span><span class="ticker-item">Cold Brew</span><span class="ticker-dot">✦</span><span class="ticker-item">Dark Ganache</span><span class="ticker-dot">✦</span><span class="ticker-item">GIFT City's Favourite Café</span><span class="ticker-dot">✦</span><span class="ticker-item">Vietnamese Coffee</span><span class="ticker-dot">✦</span><span class="ticker-item">Seasonal Beverages</span><span class="ticker-dot">✦</span><span class="ticker-item">Almond Croissants</span><span class="ticker-dot">✦</span><span class="ticker-item">Cold Brew</span><span class="ticker-dot">✦</span><span class="ticker-item">Dark Ganache</span><span class="ticker-dot">✦</span><span class="ticker-item">GIFT City's Favourite Café</span><span class="ticker-dot">✦</span></div></div>
+    <div class="home-hero">
+      <div>
+        <div class="hero-eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">GIFT City, Gandhinagar · Est. 2024</span></div>
+        <h1>Where <em>Great</em><br><strong>Coffee</strong><br>Meets the City</h1>
+        <p class="hero-sub">Specialty brews, seasonal menus, and a warm corner in the heart of Gujarat's financial hub. Fuel your best work.</p>
+        <div class="hero-btns">
+          <button class="btn btn-dark" onclick="navigate('order')">📋 Order Now</button>
+          <button class="btn btn-outline" onclick="navigate('menu')">See Menu</button>
+          <a href="https://wa.me/917874337305?text=Hi%20GAG%20Coffee!" target="_blank" rel="noopener" class="btn btn-wa">💬 WhatsApp</a>
+          <a href="https://www.instagram.com/gagcoffeeco_india/" target="_blank" rel="noopener" class="btn" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;">📸 Instagram</a>
+        </div>
+      </div>
+      <div class="hero-visual-wrap">
+        <div class="hero-card">
+          <span class="big-cup">☕</span>
+          <div class="hero-rating"><span class="stars-gold">★★★★★</span><span class="rating-text">4.9 · 62 Reviews</span></div>
+          <div class="hero-badge">Open Daily 11AM – 12AM</div>
+        </div>
+      </div>
+    </div>
+    <div class="home-quick">
+      <div class="quick-item"><span class="quick-icon">⭐</span><div class="quick-label">Rating</div><div class="quick-val">4.9 / 5</div></div>
+      <div class="quick-item"><span class="quick-icon">📍</span><div class="quick-label">Location</div><div class="quick-val">GIFT City</div></div>
+      <div class="quick-item"><span class="quick-icon">🕐</span><div class="quick-label">Open Today</div><div class="quick-val">11AM – 12AM</div></div>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="page" id="page-menu">
+    <div class="page-header"><div class="page-header-eyebrow">Our Signature</div><h1>The <em>Menu</em></h1><p>From the perfectly pulled espresso to wild seasonal specials — there's a cup for every mood.</p></div>
+    <div class="page-body">
+      <div class="menu-cats">
+        <button class="menu-cat-btn active" data-cat="all">All Items</button>
+        <button class="menu-cat-btn" data-cat="coffee">Coffee</button>
+        <button class="menu-cat-btn" data-cat="cold">Cold Drinks</button>
+        <button class="menu-cat-btn" data-cat="food">Food</button>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card" data-cat="coffee"><span class="menu-card-icon">🖤</span><h3 class="menu-card-name">The Classic Gag</h3><p class="menu-card-desc">Double shot espresso, dark roast, intense and unapologetic</p><span class="menu-card-price">₹180</span></div>
+        <div class="menu-card" data-cat="coffee"><span class="menu-card-icon">🌿</span><h3 class="menu-card-name">Matcha Mess</h3><p class="menu-card-desc">Ceremonial matcha, oat milk, a little chaos in a cup</p><span class="menu-card-price">₹240</span></div>
+        <div class="menu-card" data-cat="cold"><span class="menu-card-icon">🍯</span><h3 class="menu-card-name">Honey Drift</h3><p class="menu-card-desc">Cold brew, local honey, a cloud of cream on top</p><span class="menu-card-price">₹260</span></div>
+        <div class="menu-card" data-cat="coffee"><span class="menu-card-icon">🌶️</span><h3 class="menu-card-name">Spice Riot</h3><p class="menu-card-desc">Masala espresso, cardamom, ginger — a desi twist</p><span class="menu-card-price">₹210</span></div>
+        <div class="menu-card" data-cat="cold"><span class="menu-card-icon">🧊</span><h3 class="menu-card-name">Vietnamese Cold</h3><p class="menu-card-desc">Slow-drip Vietnamese coffee over ice, bold and sweet</p><span class="menu-card-price">₹220</span></div>
+        <div class="menu-card" data-cat="food"><span class="menu-card-icon">🥐</span><h3 class="menu-card-name">Almond Croissant</h3><p class="menu-card-desc">Buttery, flaky, mouth-melting — the perfect companion</p><span class="menu-card-price">₹120</span></div>
+        <div class="menu-card" data-cat="food"><span class="menu-card-icon">🍫</span><h3 class="menu-card-name">Dark Ganache</h3><p class="menu-card-desc">Rich authentic chocolate ganache, intensely smooth</p><span class="menu-card-price">₹150</span></div>
+        <div class="menu-card" data-cat="all"><span class="menu-card-icon">🌸</span><h3 class="menu-card-name">Seasonal Special</h3><p class="menu-card-desc">Ask us what's brewing today — changes with the season</p><span class="menu-card-price">Market Price</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDER -->
+  <div class="page" id="page-order">
+    <div class="page-header"><div class="page-header-eyebrow">Place Your Order</div><h1>Order <em>Ahead</em></h1><p>Skip the wait — order ahead and pick up fresh at the counter.</p></div>
+    <div class="page-body">
+      <div class="order-layout">
+        <div class="order-form-wrap">
+          <div id="orderForm">
+            <div id="orderError" class="error-msg" role="alert"></div>
+            <div class="form-row">
+              <div class="form-group"><label for="orderName">Your Name</label><input type="text" id="orderName" placeholder="e.g. Arjun Shah" autocomplete="name"></div>
+              <div class="form-group"><label for="orderPhone">WhatsApp Number</label><input type="tel" id="orderPhone" placeholder="98765 43210" autocomplete="tel"></div>
+            </div>
+            <div class="form-group">
+              <label for="pickupTime">Pickup Time</label>
+              <select id="pickupTime">
+                <option value="">Select a time</option>
+                <option value="In 15 minutes">In 15 minutes</option>
+                <option value="In 30 minutes">In 30 minutes</option>
+                <option value="In 1 hour">In 1 hour</option>
+                <option value="Specific time — I'll call">Specific time — I'll call</option>
+              </select>
+            </div>
+            <div>
+              <span class="order-items-label">Select Items</span>
+              <div class="order-items" id="orderItemsGrid">
+                <label class="order-item"><input type="checkbox" value="180" data-name="The Classic Gag" onchange="updateTotal()"><div><div class="order-item-name">The Classic Gag</div><div class="order-item-price">₹180</div></div></label>
+                <label class="order-item"><input type="checkbox" value="240" data-name="Matcha Mess" onchange="updateTotal()"><div><div class="order-item-name">Matcha Mess</div><div class="order-item-price">₹240</div></div></label>
+                <label class="order-item"><input type="checkbox" value="260" data-name="Honey Drift" onchange="updateTotal()"><div><div class="order-item-name">Honey Drift</div><div class="order-item-price">₹260</div></div></label>
+                <label class="order-item"><input type="checkbox" value="210" data-name="Spice Riot" onchange="updateTotal()"><div><div class="order-item-name">Spice Riot</div><div class="order-item-price">₹210</div></div></label>
+                <label class="order-item"><input type="checkbox" value="220" data-name="Vietnamese Cold" onchange="updateTotal()"><div><div class="order-item-name">Vietnamese Cold</div><div class="order-item-price">₹220</div></div></label>
+                <label class="order-item"><input type="checkbox" value="120" data-name="Almond Croissant" onchange="updateTotal()"><div><div class="order-item-name">Almond Croissant</div><div class="order-item-price">₹120</div></div></label>
+                <label class="order-item"><input type="checkbox" value="150" data-name="Dark Ganache" onchange="updateTotal()"><div><div class="order-item-name">Dark Ganache</div><div class="order-item-price">₹150</div></div></label>
+              </div>
+            </div>
+            <div class="order-total-bar"><span class="total-label">Total Amount</span><span class="total-amount" id="totalAmount">₹0</span></div>
+            <div class="form-group"><label for="orderNote">Special Instructions</label><textarea id="orderNote" placeholder="e.g. Extra shot, less sugar, oat milk..."></textarea></div>
+            <div class="order-actions">
+              <button class="btn-submit" id="orderSubmitBtn" onclick="submitOrder('confirm')">✓ Confirm Order</button>
+              <div class="order-or">— or send directly via —</div>
+              <button class="btn-wa-order" onclick="submitOrder('whatsapp')">💬 Order via WhatsApp</button>
+            </div>
+          </div>
+          <div class="order-success" id="orderSuccess" role="status">
+            <span class="big-check">✅</span>
+            <h3>Order Confirmed!</h3>
+            <p id="orderConfirmMsg"></p>
+            <a id="waFollowup" class="wa-followup" href="#" target="_blank" rel="noopener">💬 Follow up on WhatsApp</a><br>
+            <button class="btn btn-outline" onclick="resetOrder()" style="border-color:var(--brown3);color:var(--brown3);margin-top:1rem">Place Another Order</button>
+          </div>
+        </div>
+        <div class="order-sidebar-card">
+          <div class="order-summary-card">
+            <div class="summary-title">Your Order</div>
+            <div class="summary-list" id="summaryList"><p class="summary-empty">No items selected yet</p></div>
+            <hr class="summary-divider" id="summaryDivider" style="display:none">
+            <div class="summary-total-row" id="summaryTotalRow" style="display:none"><span class="summary-total-label">Total</span><span class="summary-total-val" id="summaryTotal">₹0</span></div>
+          </div>
+          <div class="order-info-card">
+            <h4>Pickup Info</h4>
+            <p>📍 S-1 Sangath Smart Life, GIFT City<br>📞 +91 78743 37305<br>🕐 11:00 AM – 12:00 AM daily</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="page" id="page-gallery">
+    <div class="page-header"><div class="page-header-eyebrow">The Vibe</div><h1>Inside <em>GAG Coffee</em></h1><p>Cozy, calm, and crafted for good conversations.</p></div>
+    <div class="page-body">
+      <div class="gallery-grid">
+        <div class="gallery-item"><img src="images/gallery1.jpg" alt="Our Space" onerror="this.style.display='none'"><span class="gallery-emoji">☕</span><div class="gallery-overlay"><span class="gallery-overlay-text">Our Space</span></div></div>
+        <div class="gallery-item"><img src="images/gallery2.jpg" alt="Fresh Bakes" onerror="this.style.display='none'"><span class="gallery-emoji">🥐</span><div class="gallery-overlay"><span class="gallery-overlay-text">Fresh Bakes</span></div></div>
+        <div class="gallery-item"><img src="images/gallery3.jpg" alt="The Greens" onerror="this.style.display='none'"><span class="gallery-emoji">🌿</span><div class="gallery-overlay"><span class="gallery-overlay-text">The Greens</span></div></div>
+        <div class="gallery-item"><img src="images/gallery4.jpg" alt="Ganache" onerror="this.style.display='none'"><span class="gallery-emoji">🍫</span><div class="gallery-overlay"><span class="gallery-overlay-text">Ganache</span></div></div>
+        <div class="gallery-item"><img src="images/gallery5.jpg" alt="Good Vibes" onerror="this.style.display='none'"><span class="gallery-emoji">✨</span><div class="gallery-overlay"><span class="gallery-overlay-text">Good Vibes</span></div></div>
+      </div>
+      <p class="gallery-note">📸 Place gallery1.jpg – gallery5.jpg inside an "images/" folder to show real photos.</p>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="page" id="page-reviews">
+    <div class="page-header"><div class="page-header-eyebrow">People Say</div><h1>Real <em>Reactions</em></h1><p>Straight from Google Reviews.</p></div>
+    <div class="page-body">
+      <div class="rating-summary">
+        <div class="rating-big">4.9</div>
+        <div class="rating-details"><span class="rating-stars-big">★★★★★</span><span class="rating-count">Based on 62+ Google Reviews</span></div>
+        <div class="rating-cta"><p>Enjoyed your visit?</p><a href="https://maps.google.com/?cid=8685670377000898713" target="_blank" rel="noopener" class="btn btn-outline" style="border-color:var(--gold2);color:var(--gold2)">Leave a Review ↗</a></div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Best food and the best coffees. Love the ambience and cozy, positive vibes. Strongly recommendable."</p><span class="testi-author">— Google Review</span></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The ganache was good — authentic chocolaty taste. Try it with almond croissants. Absolutely mouth melting!"</p><span class="testi-author">— Google Review</span></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Best Vietnamese coffee for dark lovers and rare seasonal beverages for cold coffee fans. Must visit!"</p><span class="testi-author">— Google Review</span></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The perfect spot to unwind after a long day at the office. Great coffee, even better atmosphere."</p><span class="testi-author">— Google Review</span></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Spice Riot is an absolute must for anyone who loves chai-inspired flavours. Wonderfully crafted."</p><span class="testi-author">— Google Review</span></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"GIFT City finally has a café worth bragging about. The matcha is perfect and the vibe is immaculate."</p><span class="testi-author">— Google Review</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page" id="page-about">
+    <div class="page-header"><div class="page-header-eyebrow">Our Story</div><h1>Born From a <em>Bad Cup</em></h1><p>The story behind GIFT City's favourite café.</p></div>
+    <div class="page-body">
+      <div class="about-grid">
+        <div class="about-visual"><span class="about-big-icon">☕</span><div class="about-stats"><div class="about-stat"><span class="stat-num">4.9</span><span class="stat-label">Google Rating</span></div><div class="about-stat"><span class="stat-num">62+</span><span class="stat-label">Reviews</span></div><div class="about-stat"><span class="stat-num">11AM</span><span class="stat-label">Opens Daily</span></div><div class="about-stat"><span class="stat-num">12AM</span><span class="stat-label">Closes Daily</span></div></div></div>
+        <div class="about-text-section">
+          <h2>A Name Born From <em>Horror</em></h2>
+          <p>GAG Coffee started as a joke — a name born from the sheer horror of bad office coffee. We turned that gag into something serious: a relentless pursuit of the perfect cup.</p>
+          <p>Nestled in GIFT City, we fuel the bankers, fintech founders, and dreamers building India's financial future — one exceptional brew at a time.</p>
+          <p>From Vietnamese cold brews to seasonal specialties, every item is crafted with obsessive care and sourced with intention.</p>
+          <button class="btn btn-dark" onclick="navigate('order')" style="margin-top:1.5rem">Order Now →</button>
+        </div>
+      </div>
+      <div class="about-values" style="margin-top:2.5rem">
+        <div class="value-item"><span class="value-icon">🫘</span><div class="value-title">Specialty Beans</div><div class="value-desc">Carefully sourced single-origin and blended coffees.</div></div>
+        <div class="value-item"><span class="value-icon">🧪</span><div class="value-title">Crafted Daily</div><div class="value-desc">Every batch made fresh — no shortcuts, no compromises.</div></div>
+        <div class="value-item"><span class="value-icon">🌿</span><div class="value-title">Seasonal Menus</div><div class="value-desc">The menu evolves with the seasons. Always something new.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page" id="page-contact">
+    <div class="page-header"><div class="page-header-eyebrow">Find Us</div><h1>Come <em>Visit</em></h1><p>We're right in the heart of GIFT City.</p></div>
+    <div class="page-body">
+      <div class="contact-grid">
+        <div>
+          <div class="contact-info-card">
+            <h2>Get in <em>Touch</em></h2>
+            <div class="contact-detail">
+              <div class="contact-item"><span class="contact-icon">📍</span><div><h4>Address</h4><p>S-1, Sangath Smart Life, Shram Marg<br>Opp. Jamnabai Narsee School<br>GIFT City, Gandhinagar 382050</p></div></div>
+              <div class="contact-item"><span class="contact-icon">🕐</span><div><h4>Hours</h4><p>Open Daily · 11:00 AM – 12:00 AM</p></div></div>
+              <div class="contact-item"><span class="contact-icon">📞</span><div><h4>Phone / WhatsApp</h4><p><a href="tel:+917874337305">+91 78743 37305</a></p></div></div>
+              <div class="contact-item"><span class="contact-icon">⭐</span><div><h4>Leave a Review</h4><p><a href="https://maps.google.com/?cid=8685670377000898713" target="_blank" rel="noopener">Rate us on Google Maps ↗</a></p></div></div>
+            </div>
+            <div class="contact-action-btns">
+              <a href="https://maps.google.com/?cid=8685670377000898713" target="_blank" rel="noopener" class="btn btn-dark" style="font-size:.7rem">📍 Directions</a>
+              <a href="https://wa.me/917874337305" target="_blank" rel="noopener" class="btn btn-wa" style="font-size:.7rem">💬 WhatsApp</a>
+              <a href="https://www.instagram.com/gagcoffeeco_india/" target="_blank" rel="noopener" class="btn" style="font-size:.7rem;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;">📸 Instagram</a>
+            </div>
+            <div class="contact-item" style="margin-top:1rem"><span class="contact-icon">📸</span><div><h4>Instagram</h4><p><a href="https://www.instagram.com/gagcoffeeco_india/" target="_blank" rel="noopener">@gagcoffeeco_india ↗</a></p></div></div>
+          </div>
+          <div class="map-embed">
+            <iframe src="https://maps.google.com/maps?q=GAG+Coffee+Co+GIFT+City+Gandhinagar+Gujarat&output=embed&z=16" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="GAG Coffee Co. on Google Maps"></iframe>
+            <div class="map-embed-label">📍 GIFT City, Gandhinagar<a href="https://maps.google.com/?cid=8685670377000898713" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>
+          </div>
+        </div>
+        <div class="contact-form-card">
+          <h3>Send a Message</h3>
+          <div class="contact-form-wrap" id="contactFormWrap">
+            <label for="contactName">Your Name</label>
+            <input type="text" id="contactName" placeholder="Sam Patel" autocomplete="name">
+            <label for="contactEmail">Email</label>
+            <input type="email" id="contactEmail" placeholder="sam@example.com" autocomplete="email">
+            <div id="contactError" class="contact-error-msg" role="alert"></div>
+            <label for="contactMessage">Message</label>
+            <textarea id="contactMessage" placeholder="Feedback, events, collaborations..."></textarea>
+            <button class="btn-contact" id="contactSubmitBtn" onclick="submitContact()">Send Message</button>
+          </div>
+          <div class="contact-success-box" id="contactSuccess" role="status"><p>✅ &nbsp;Message received! We'll get back to you soon.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="page" id="page-admin">
+    <!-- Login -->
+    <div class="admin-login-wrap" id="adminLoginWrap">
+      <div class="admin-login-card">
+        <h2>Admin <em>Access</em></h2>
+        <p>GAG Coffee Co. Staff Only</p>
+        <div class="admin-login-fields">
+          <label for="adminUser">Username</label>
+          <input type="text" id="adminUser" placeholder="admin" autocomplete="username">
+          <label for="adminPass">Password</label>
+          <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLogin()">
+          <div class="admin-login-err" id="adminLoginErr"></div>
+          <button class="btn-admin-login" id="adminLoginBtn" onclick="adminLogin()">🔐 Sign In</button>
+        </div>
+      </div>
+    </div>
+    <!-- Dashboard -->
+    <div class="admin-panel" id="adminPanel">
+      <div class="admin-topbar">
+        <h2>Dashboard <em>Overview</em></h2>
+        <div style="display:flex;align-items:center;gap:1rem">
+          <span id="adminLastRefresh" style="font-size:.72rem;color:var(--text3);letter-spacing:1px"></span>
+          <button class="btn-logout" onclick="adminLogout()">Sign Out</button>
+        </div>
+      </div>
+      <div class="admin-stats" id="adminStats">
+        <div class="stat-tile"><span class="stat-tile-num" id="statOrders">—</span><span class="stat-tile-label">Total Orders</span></div>
+        <div class="stat-tile"><span class="stat-tile-num" id="statRevenue">—</span><span class="stat-tile-label">Total Revenue</span></div>
+        <div class="stat-tile"><span class="stat-tile-num" id="statPending">—</span><span class="stat-tile-label">Pending Orders</span></div>
+        <div class="stat-tile"><span class="stat-tile-num" id="statMessages">—</span><span class="stat-tile-label">Unread Messages</span></div>
+      </div>
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')">📋 Orders</button>
+        <button class="admin-tab" data-tab="messages" onclick="switchAdminTab('messages')">✉️ Messages</button>
+        <button class="admin-tab" data-tab="top-items" onclick="switchAdminTab('top-items')">🏆 Top Items</button>
+      </div>
+      <div id="adminTabOrders">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Order ID</th><th>Name</th><th>Phone</th><th>Items</th><th>Total</th><th>Pickup</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="ordersTableBody"><tr><td colspan="8" class="admin-loading">Loading orders…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="adminTabMessages" style="display:none">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th></tr></thead>
+            <tbody id="messagesTableBody"><tr><td colspan="4" class="admin-loading">Loading messages…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="adminTabTopItems" style="display:none">
+        <div class="top-items-list" id="topItemsList"><div class="admin-loading">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<a class="wa-float" href="https://wa.me/917874337305?text=Hi%20GAG%20Coffee!" target="_blank" rel="noopener" aria-label="WhatsApp us">💬</a>
+<a class="ig-float" href="https://www.instagram.com/gagcoffeeco_india/" target="_blank" rel="noopener" aria-label="Follow on Instagram">📸</a>
+
+<script>
+/* ── CONFIG — Change this to your deployed API URL ─────────────────────────── */
+var API_BASE = 'http://localhost:8000/api';  // e.g. https://gag-coffee.vercel.app/api
+
+var WA = '917874337305';
+var currentPage = 'home';
+var adminToken = null;
+
+/* ── API HELPER ──────────────────────────────────────────────────────────────*/
+async function api(path, opts) {
+  opts = opts || {};
+  var headers = { 'Content-Type': 'application/json' };
+  if (adminToken) headers['Authorization'] = 'Bearer ' + adminToken;
+  Object.assign(headers, opts.headers || {});
+  var res = await fetch(API_BASE + path, { headers: headers, ...opts });
+  var data = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, data: data };
+}
+
+/* ── API STATUS CHECK ────────────────────────────────────────────────────────*/
+async function checkApi() {
+  var dot = document.getElementById('apiDot');
+  var txt = document.getElementById('apiStatusText');
+  try {
+    var res = await fetch(API_BASE + '/orders/', { signal: AbortSignal.timeout(3000) });
+    if (res.status < 500) {
+      dot.classList.add('online');
+      txt.textContent = 'API Online';
+    } else throw new Error();
+  } catch(e) {
+    dot.classList.remove('online');
+    txt.textContent = 'API Offline';
+  }
+}
+checkApi();
+
+/* ── NAVIGATION ──────────────────────────────────────────────────────────────*/
+function navigate(pageId) {
+  if (pageId === currentPage) return;
+  var old = document.getElementById('page-' + currentPage);
+  var next = document.getElementById('page-' + pageId);
+  if (!next) return;
+  old.classList.add('exit');
+  setTimeout(function() { old.classList.remove('active', 'exit'); }, 350);
+  next.classList.add('active');
+  next.scrollTop = 0;
+  document.querySelectorAll('.nav-item').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.page === pageId);
+  });
+  currentPage = pageId;
+  closeSidebar();
+  if (pageId === 'admin' && adminToken) loadAdminData();
+}
+
+document.querySelectorAll('.nav-item').forEach(function(el) {
+  el.addEventListener('click', function() { navigate(el.dataset.page); });
+});
+
+/* ── MOBILE SIDEBAR ──────────────────────────────────────────────────────────*/
+var sidebar = document.getElementById('sidebar');
+var overlay = document.getElementById('sidebarOverlay');
+document.getElementById('mobileToggle').addEventListener('click', function() {
+  sidebar.classList.add('open'); overlay.classList.remove('hidden');
+});
+overlay.addEventListener('click', closeSidebar);
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.add('hidden'); }
+
+/* ── MENU FILTER ─────────────────────────────────────────────────────────────*/
+document.querySelectorAll('.menu-cat-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.menu-cat-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var cat = btn.dataset.cat;
+    document.querySelectorAll('.menu-card').forEach(function(card) {
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+    });
+  });
+});
+
+/* ── ORDER TOTAL + SUMMARY ───────────────────────────────────────────────────*/
+function updateTotal() {
+  var boxes = document.querySelectorAll('#orderItemsGrid input:checked');
+  var t = 0; var items = [];
+  boxes.forEach(function(b) { t += +b.value; items.push({ name: b.dataset.name, price: +b.value }); });
+  document.getElementById('totalAmount').textContent = '₹' + t;
+  var list = document.getElementById('summaryList');
+  var divider = document.getElementById('summaryDivider');
+  var totalRow = document.getElementById('summaryTotalRow');
+  if (!items.length) {
+    list.innerHTML = '<p class="summary-empty">No items selected yet</p>';
+    divider.style.display = 'none'; totalRow.style.display = 'none';
+  } else {
+    list.innerHTML = items.map(function(i) {
+      return '<div class="summary-row"><span class="summary-row-name">' + i.name + '</span><span class="summary-row-price">₹' + i.price + '</span></div>';
+    }).join('');
+    divider.style.display = ''; totalRow.style.display = '';
+    document.getElementById('summaryTotal').textContent = '₹' + t;
+  }
+}
+
+/* ── HELPERS ─────────────────────────────────────────────────────────────────*/
+function isPhone(p) { return /^[6-9]\d{9}$/.test(p.replace(/\s/g, '')); }
+function isEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+function orderId() { return 'GAG-' + Date.now().toString(36).toUpperCase().slice(-5); }
+function showErr(el, msg) { el.textContent = msg; el.style.display = 'block'; el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+
+/* ── SUBMIT ORDER (calls API) ────────────────────────────────────────────────*/
+async function submitOrder(mode) {
+  var name = document.getElementById('orderName').value.trim();
+  var phone = document.getElementById('orderPhone').value.trim().replace(/\s/g, '');
+  var time = document.getElementById('pickupTime').value;
+  var boxes = document.querySelectorAll('#orderItemsGrid input:checked');
+  var err = document.getElementById('orderError');
+  var note = document.getElementById('orderNote').value.trim();
+  err.style.display = 'none';
+
+  if (!name) { showErr(err, 'Please enter your name.'); return; }
+  if (!isPhone(phone)) { showErr(err, 'Enter a valid 10-digit Indian number (starts 6–9).'); return; }
+  if (!time) { showErr(err, 'Please select a pickup time.'); return; }
+  if (!boxes.length) { showErr(err, 'Please select at least one item.'); return; }
+
+  var items = [...boxes].map(function(b) { return b.dataset.name; });
+  var total = [...boxes].reduce(function(s, b) { return s + (+b.value); }, 0);
+
+  if (mode === 'whatsapp') {
+    var id = orderId();
+    var msg = 'Hello GAG Coffee! 🍵\n\n*Order #' + id + '*\n👤 Name: ' + name + '\n📦 Items: ' + items.join(', ') + '\n💰 Total: ₹' + total + '\n⏰ Pickup: ' + time + (note ? '\n📝 Note: ' + note : '') + '\n\nPlease confirm!';
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank');
+    // Also save to backend
+    api('/orders/', { method: 'POST', body: JSON.stringify({ name, phone, pickup_time: time, items, note }) });
+    showOrderSuccess({ name, items: items.join(', '), total, time }, id);
+    return;
+  }
+
+  var btn = document.getElementById('orderSubmitBtn');
+  btn.textContent = 'Confirming…'; btn.disabled = true;
+
+  try {
+    var r = await api('/orders/', {
+      method: 'POST',
+      body: JSON.stringify({ name, phone, pickup_time: time, items, note })
+    });
+    if (r.ok) {
+      var order = r.data.order;
+      showOrderSuccess({ name, items: items.join(', '), total: order.total, time }, order.order_id);
+    } else {
+      var errMsg = 'Something went wrong. ';
+      if (r.data.errors) errMsg += Object.values(r.data.errors).join(' ');
+      showErr(err, errMsg);
+      btn.textContent = '✓ Confirm Order'; btn.disabled = false;
+    }
+  } catch(e) {
+    // Fallback: work offline
+    showOrderSuccess({ name, items: items.join(', '), total, time }, orderId());
+    btn.textContent = '✓ Confirm Order'; btn.disabled = false;
+  }
+}
+
+function showOrderSuccess(d, id) {
+  document.getElementById('orderForm').style.display = 'none';
+  var s = document.getElementById('orderSuccess'); s.style.display = 'block';
+  document.getElementById('orderConfirmMsg').textContent =
+    'Thanks ' + d.name + '! Order #' + id + ' — ' + d.items + ' · ₹' + d.total + '. Ready ' + d.time.toLowerCase() + '.';
+  var msg = 'Hi! Following up on Order #' + id + ' for ' + d.name;
+  document.getElementById('waFollowup').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+  s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetOrder() {
+  document.getElementById('orderForm').style.display = 'block';
+  document.getElementById('orderSuccess').style.display = 'none';
+  ['orderName', 'orderPhone', 'orderNote'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('pickupTime').value = '';
+  document.getElementById('totalAmount').textContent = '₹0';
+  document.getElementById('orderError').style.display = 'none';
+  document.querySelectorAll('#orderItemsGrid input').forEach(function(b) { b.checked = false; });
+  var btn = document.getElementById('orderSubmitBtn');
+  btn.textContent = '✓ Confirm Order'; btn.disabled = false;
+  updateTotal();
+}
+
+/* ── CONTACT (calls API) ─────────────────────────────────────────────────────*/
+async function submitContact() {
+  var name = document.getElementById('contactName').value.trim();
+  var email = document.getElementById('contactEmail').value.trim();
+  var msg = document.getElementById('contactMessage').value.trim();
+  var err = document.getElementById('contactError');
+  var btn = document.getElementById('contactSubmitBtn');
+  err.style.display = 'none';
+  if (!name) { showErr(err, 'Please enter your name.'); return; }
+  if (!isEmail(email)) { showErr(err, 'Please enter a valid email.'); return; }
+  if (!msg) { showErr(err, 'Please write a message.'); return; }
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  try {
+    var r = await api('/contact/', { method: 'POST', body: JSON.stringify({ name, email, message: msg }) });
+    if (r.ok) {
+      document.getElementById('contactFormWrap').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    } else {
+      var errMsg = 'Could not send. ';
+      if (r.data.errors) errMsg += Object.values(r.data.errors).join(' ');
+      showErr(err, errMsg);
+      btn.textContent = 'Send Message'; btn.disabled = false;
+    }
+  } catch(e) {
+    document.getElementById('contactFormWrap').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+  }
+}
+
+/* ── ADMIN AUTH ──────────────────────────────────────────────────────────────*/
+async function adminLogin() {
+  var user = document.getElementById('adminUser').value.trim();
+  var pass = document.getElementById('adminPass').value;
+  var err = document.getElementById('adminLoginErr');
+  var btn = document.getElementById('adminLoginBtn');
+  err.style.display = 'none';
+  if (!user || !pass) { showErr(err, 'Enter username and password.'); return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try {
+    var r = await api('/auth/login/', { method: 'POST', body: JSON.stringify({ username: user, password: pass }) });
+    if (r.ok) {
+      adminToken = r.data.access;
+      document.getElementById('adminLoginWrap').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadAdminData();
+    } else {
+      showErr(err, r.data.detail || 'Invalid credentials.');
+      btn.textContent = '🔐 Sign In'; btn.disabled = false;
+    }
+  } catch(e) {
+    showErr(err, 'Could not reach server. Is the API running?');
+    btn.textContent = '🔐 Sign In'; btn.disabled = false;
+  }
+}
+
+function adminLogout() {
+  adminToken = null;
+  if (adminRefreshInterval) { clearInterval(adminRefreshInterval); adminRefreshInterval = null; }
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('adminLoginWrap').style.display = 'flex';
+  document.getElementById('adminPass').value = '';
+  document.getElementById('adminLoginBtn').textContent = '🔐 Sign In';
+  document.getElementById('adminLoginBtn').disabled = false;
+}
+
+/* ── ADMIN DATA ──────────────────────────────────────────────────────────────*/
+var adminRefreshInterval = null;
+
+async function loadAdminData() {
+  loadAdminStats();
+  loadOrders();
+  // Start auto-refresh every 3 seconds
+  if (adminRefreshInterval) clearInterval(adminRefreshInterval);
+  adminRefreshInterval = setInterval(function() {
+    if (adminToken) {
+      loadAdminStats();
+      loadOrders();
+    } else {
+      clearInterval(adminRefreshInterval);
+    }
+  }, 15000);
+}
+
+async function loadAdminStats() {
+  var r = await api('/admin/stats/');
+  if (!r.ok) return;
+  var d = r.data;
+  document.getElementById('statOrders').textContent = d.total_orders;
+  document.getElementById('statRevenue').textContent = '₹' + (d.total_revenue || 0).toLocaleString('en-IN');
+  document.getElementById('statPending').textContent = (d.status_counts && d.status_counts.pending) || 0;
+  document.getElementById('statMessages').textContent = d.unread_messages || 0;
+
+  // Show last refreshed time
+  var now = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  var el = document.getElementById('adminLastRefresh');
+  if (el) el.textContent = 'Last updated: ' + now;
+
+  // Top items
+  var list = document.getElementById('topItemsList');
+  if (d.top_items && d.top_items.length) {
+    list.innerHTML = d.top_items.map(function(i) {
+      return '<div class="top-item"><span class="top-item-name">' + i.name + '</span><span class="top-item-count">' + i.count + ' orders</span></div>';
+    }).join('');
+  } else {
+    list.innerHTML = '<div class="admin-empty">No data yet</div>';
+  }
+}
+
+async function loadOrders() {
+  var tbody = document.getElementById('ordersTableBody');
+  tbody.innerHTML = '<tr><td colspan="8" class="admin-loading">Loading orders…</td></tr>';
+  var r = await api('/orders/');
+  if (!r.ok) {
+    tbody.innerHTML = '<tr><td colspan="8" class="admin-empty">Could not load orders. ' + (r.data.detail || '') + '</td></tr>';
+    return;
+  }
+  var orders = r.data;
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="8" class="admin-empty">No orders yet.</td></tr>'; return;
+  }
+  tbody.innerHTML = orders.map(function(o) {
+    var date = new Date(o.created_at).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+    return '<tr>' +
+      '<td><strong>' + o.order_id + '</strong></td>' +
+      '<td>' + o.name + '</td>' +
+      '<td>' + o.phone + '</td>' +
+      '<td style="max-width:180px;font-size:.78rem">' + (Array.isArray(o.items) ? o.items.join(', ') : o.items) + '</td>' +
+      '<td>₹' + o.total + '</td>' +
+      '<td style="font-size:.78rem">' + o.pickup_time + '</td>' +
+      '<td><select class="status-select" onchange="updateStatus(\'' + o._id + '\', this.value)">' +
+        ['pending','confirmed','ready','completed','cancelled'].map(function(s) {
+          return '<option value="' + s + '"' + (o.status === s ? ' selected' : '') + '>' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+        }).join('') +
+      '</select></td>' +
+      '<td style="font-size:.75rem;color:var(--text3)">' + date + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+async function loadMessages() {
+  var tbody = document.getElementById('messagesTableBody');
+  tbody.innerHTML = '<tr><td colspan="4" class="admin-loading">Loading messages…</td></tr>';
+  var r = await api('/contact/');
+  if (!r.ok) {
+    tbody.innerHTML = '<tr><td colspan="4" class="admin-empty">Could not load messages.</td></tr>'; return;
+  }
+  var msgs = r.data;
+  if (!msgs.length) { tbody.innerHTML = '<tr><td colspan="4" class="admin-empty">No messages yet.</td></tr>'; return; }
+  tbody.innerHTML = msgs.map(function(m) {
+    var date = new Date(m.created_at).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+    return '<tr>' +
+      '<td><strong>' + m.name + '</strong></td>' +
+      '<td>' + m.email + '</td>' +
+      '<td style="max-width:260px;font-size:.82rem">' + m.message + '</td>' +
+      '<td style="font-size:.75rem;color:var(--text3)">' + date + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+async function updateStatus(orderId, newStatus) {
+  var r = await api('/orders/' + orderId + '/status/', {
+    method: 'PATCH',
+    body: JSON.stringify({ status: newStatus })
+  });
+  if (!r.ok) alert('Could not update status: ' + (r.data.detail || 'Error'));
+}
+
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
+  document.getElementById('adminTabOrders').style.display = tab === 'orders' ? '' : 'none';
+  document.getElementById('adminTabMessages').style.display = tab === 'messages' ? '' : 'none';
+  document.getElementById('adminTabTopItems').style.display = tab === 'top-items' ? '' : 'none';
+  if (tab === 'messages') loadMessages();
+  if (tab === 'top-items') loadAdminStats();
+}
+</script>
+</body>
+</html>
