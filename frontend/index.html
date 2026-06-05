@@ -901,10 +901,61 @@ async function loadAdminData() {
   }, 15000);
 }
 
+var _lastOrderCount = null;
+
+function playNewOrderSound() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Three quick beeps
+    [0, 0.18, 0.36].forEach(function(delay) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.4, ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.15);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 0.15);
+    });
+  } catch(e) {}
+}
+
+function showNewOrderBanner() {
+  var banner = document.getElementById('newOrderBanner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'newOrderBanner';
+    banner.style.cssText = 'position:fixed;top:1.5rem;right:1.5rem;background:#25D366;color:#fff;padding:.85rem 1.5rem;border-radius:12px;font-weight:600;font-size:.95rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.2);animation:slideIn .3s ease';
+    banner.textContent = '🛎️ New Order Received!';
+    document.body.appendChild(banner);
+    // Add animation style once
+    if (!document.getElementById('bannerStyle')) {
+      var s = document.createElement('style');
+      s.id = 'bannerStyle';
+      s.textContent = '@keyframes slideIn{from{transform:translateX(120%)}to{transform:translateX(0)}}';
+      document.head.appendChild(s);
+    }
+  }
+  banner.style.display = 'block';
+  clearTimeout(banner._hideTimer);
+  banner._hideTimer = setTimeout(function() { banner.style.display = 'none'; }, 4000);
+}
+
 async function loadAdminStats() {
   var r = await api('/admin/stats/');
   if (!r.ok) return;
   var d = r.data;
+  var newCount = d.total_orders || 0;
+
+  // Play sound and show banner if new order arrived
+  if (_lastOrderCount !== null && newCount > _lastOrderCount) {
+    playNewOrderSound();
+    showNewOrderBanner();
+  }
+  _lastOrderCount = newCount;
+
   document.getElementById('statOrders').textContent = d.total_orders;
   document.getElementById('statRevenue').textContent = '₹' + (d.total_revenue || 0).toLocaleString('en-IN');
   document.getElementById('statPending').textContent = (d.status_counts && d.status_counts.pending) || 0;
