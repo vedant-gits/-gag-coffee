@@ -393,16 +393,7 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
         <button class="menu-cat-btn" data-cat="cold">Cold Drinks</button>
         <button class="menu-cat-btn" data-cat="food">Food</button>
       </div>
-      <div class="menu-grid">
-        <div class="menu-card" data-cat="coffee"><span class="menu-card-icon">🖤</span><h3 class="menu-card-name">The Classic Gag</h3><p class="menu-card-desc">Double shot espresso, dark roast, intense and unapologetic</p><span class="menu-card-price">₹180</span></div>
-        <div class="menu-card" data-cat="coffee"><span class="menu-card-icon">🌿</span><h3 class="menu-card-name">Matcha Mess</h3><p class="menu-card-desc">Ceremonial matcha, oat milk, a little chaos in a cup</p><span class="menu-card-price">₹240</span></div>
-        <div class="menu-card" data-cat="cold"><span class="menu-card-icon">🍯</span><h3 class="menu-card-name">Honey Drift</h3><p class="menu-card-desc">Cold brew, local honey, a cloud of cream on top</p><span class="menu-card-price">₹260</span></div>
-        <div class="menu-card" data-cat="coffee"><span class="menu-card-icon">🌶️</span><h3 class="menu-card-name">Spice Riot</h3><p class="menu-card-desc">Masala espresso, cardamom, ginger — a desi twist</p><span class="menu-card-price">₹210</span></div>
-        <div class="menu-card" data-cat="cold"><span class="menu-card-icon">🧊</span><h3 class="menu-card-name">Vietnamese Cold</h3><p class="menu-card-desc">Slow-drip Vietnamese coffee over ice, bold and sweet</p><span class="menu-card-price">₹220</span></div>
-        <div class="menu-card" data-cat="food"><span class="menu-card-icon">🥐</span><h3 class="menu-card-name">Almond Croissant</h3><p class="menu-card-desc">Buttery, flaky, mouth-melting — the perfect companion</p><span class="menu-card-price">₹120</span></div>
-        <div class="menu-card" data-cat="food"><span class="menu-card-icon">🍫</span><h3 class="menu-card-name">Dark Ganache</h3><p class="menu-card-desc">Rich authentic chocolate ganache, intensely smooth</p><span class="menu-card-price">₹150</span></div>
-        <div class="menu-card" data-cat="all"><span class="menu-card-icon">🌸</span><h3 class="menu-card-name">Seasonal Special</h3><p class="menu-card-desc">Ask us what's brewing today — changes with the season</p><span class="menu-card-price">Market Price</span></div>
-      </div>
+      <div class="menu-grid" id="menuGrid"><div style="padding:2rem;color:var(--text3)">Loading menu...</div></div>
     </div>
   </div>
 
@@ -431,13 +422,7 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
             <div>
               <span class="order-items-label">Select Items</span>
               <div class="order-items" id="orderItemsGrid">
-                <label class="order-item"><input type="checkbox" value="180" data-name="The Classic Gag" onchange="updateTotal()"><div><div class="order-item-name">The Classic Gag</div><div class="order-item-price">₹180</div></div></label>
-                <label class="order-item"><input type="checkbox" value="240" data-name="Matcha Mess" onchange="updateTotal()"><div><div class="order-item-name">Matcha Mess</div><div class="order-item-price">₹240</div></div></label>
-                <label class="order-item"><input type="checkbox" value="260" data-name="Honey Drift" onchange="updateTotal()"><div><div class="order-item-name">Honey Drift</div><div class="order-item-price">₹260</div></div></label>
-                <label class="order-item"><input type="checkbox" value="210" data-name="Spice Riot" onchange="updateTotal()"><div><div class="order-item-name">Spice Riot</div><div class="order-item-price">₹210</div></div></label>
-                <label class="order-item"><input type="checkbox" value="220" data-name="Vietnamese Cold" onchange="updateTotal()"><div><div class="order-item-name">Vietnamese Cold</div><div class="order-item-price">₹220</div></div></label>
-                <label class="order-item"><input type="checkbox" value="120" data-name="Almond Croissant" onchange="updateTotal()"><div><div class="order-item-name">Almond Croissant</div><div class="order-item-price">₹120</div></div></label>
-                <label class="order-item"><input type="checkbox" value="150" data-name="Dark Ganache" onchange="updateTotal()"><div><div class="order-item-name">Dark Ganache</div><div class="order-item-price">₹150</div></div></label>
+                <div id="orderItemsGrid" style="display:contents"></div>
               </div>
             </div>
             <div class="order-total-bar"><span class="total-label">Total Amount</span><span class="total-amount" id="totalAmount">₹0</span></div>
@@ -609,6 +594,7 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
         <button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')">📋 Orders</button>
         <button class="admin-tab" data-tab="messages" onclick="switchAdminTab('messages')">✉️ Messages</button>
         <button class="admin-tab" data-tab="top-items" onclick="switchAdminTab('top-items')">🏆 Top Items</button>
+        <button class="admin-tab" data-tab="menu-mgmt" onclick="switchAdminTab('menu-mgmt')">🍽️ Menu</button>
       </div>
       <div id="adminTabOrders">
         <div class="admin-table-wrap">
@@ -628,6 +614,38 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
       </div>
       <div id="adminTabTopItems" style="display:none">
         <div class="top-items-list" id="topItemsList"><div class="admin-loading">Loading…</div></div>
+      </div>
+      <div id="adminTabMenuMgmt" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--brown3);font-weight:400">Menu Items</h3>
+          <button class="btn btn-dark" onclick="showAddMenuForm()" style="padding:.5rem 1.2rem;font-size:.7rem">+ Add Item</button>
+        </div>
+        <div id="addMenuForm" style="display:none;background:var(--cream2);padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--cream3)">
+          <h4 style="margin-bottom:1rem;font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--brown3)">New Menu Item</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+            <div class="form-group"><label>Name *</label><input type="text" id="mName" placeholder="e.g. Oat Latte"></div>
+            <div class="form-group"><label>Price (₹) *</label><input type="number" id="mPrice" placeholder="e.g. 200"></div>
+            <div class="form-group"><label>Description</label><input type="text" id="mDesc" placeholder="Short description"></div>
+            <div class="form-group"><label>Category</label>
+              <select id="mCat" style="width:100%;padding:.6rem;border:1px solid var(--cream3);background:var(--cream);font-family:'Jost',sans-serif">
+                <option value="coffee">Coffee</option>
+                <option value="cold">Cold</option>
+                <option value="food">Food</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Icon (emoji)</label><input type="text" id="mIcon" placeholder="☕" maxlength="4"></div>
+          </div>
+          <div style="display:flex;gap:.75rem;margin-top:1rem">
+            <button class="btn btn-dark" onclick="addMenuItem()" style="padding:.5rem 1.2rem;font-size:.7rem">Save Item</button>
+            <button class="btn" onclick="hideAddMenuForm()" style="padding:.5rem 1.2rem;font-size:.7rem;border:1px solid var(--cream3)">Cancel</button>
+          </div>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Icon</th><th>Name</th><th>Category</th><th>Price</th><th>Available</th><th>Actions</th></tr></thead>
+            <tbody id="menuMgmtList"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">Loading...</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -661,7 +679,7 @@ async function checkApi() {
   var dot = document.getElementById('apiDot');
   var txt = document.getElementById('apiStatusText');
   try {
-    var res = await fetch(API_BASE + '/orders/', { signal: AbortSignal.timeout(3000) });
+    var res = await fetch(API_BASE + '/menu/', { signal: AbortSignal.timeout(3000) });
     if (res.status < 500) {
       dot.classList.add('online');
       txt.textContent = 'API Online';
@@ -889,7 +907,7 @@ var adminRefreshInterval = null;
 async function loadAdminData() {
   loadAdminStats();
   loadOrders();
-  // Start auto-refresh every 3 seconds
+  // Start auto-refresh every 15 seconds
   if (adminRefreshInterval) clearInterval(adminRefreshInterval);
   adminRefreshInterval = setInterval(function() {
     if (adminToken) {
@@ -1041,8 +1059,111 @@ function switchAdminTab(tab) {
   document.getElementById('adminTabOrders').style.display = tab === 'orders' ? '' : 'none';
   document.getElementById('adminTabMessages').style.display = tab === 'messages' ? '' : 'none';
   document.getElementById('adminTabTopItems').style.display = tab === 'top-items' ? '' : 'none';
+  document.getElementById('adminTabMenuMgmt').style.display = tab === 'menu-mgmt' ? '' : 'none';
   if (tab === 'messages') loadMessages();
   if (tab === 'top-items') loadAdminStats();
+  if (tab === 'menu-mgmt') loadMenuMgmt();
+}
+
+// ── Menu dynamic loading ───────────────────────────────────────────────
+async function loadMenuItems() {
+  try {
+    var r = await fetch(API_BASE + '/menu/');
+    if (!r.ok) return;
+    var items = await r.json();
+    // Render menu page
+    var grid = document.getElementById('menuGrid');
+    if (grid) {
+      grid.innerHTML = items.filter(function(i){return i.available;}).map(function(item) {
+        return '<div class="menu-card" data-cat="' + item.category + '">' +
+          '<span class="menu-card-icon">' + item.icon + '</span>' +
+          '<h3 class="menu-card-name">' + item.name + '</h3>' +
+          '<p class="menu-card-desc">' + item.desc + '</p>' +
+          '<span class="menu-card-price">₹' + item.price + '</span>' +
+          '</div>';
+      }).join('');
+      // Re-apply category filter
+      document.querySelectorAll('.menu-card').forEach(function(card) {
+        card.style.display = '';
+      });
+    }
+    // Render order items
+    var ogrid = document.getElementById('orderItemsGrid');
+    if (ogrid) {
+      ogrid.innerHTML = items.filter(function(i){return i.available;}).map(function(item) {
+        return '<label class="order-item">' +
+          '<input type="checkbox" value="' + item.price + '" data-name="' + item.name + '" onchange="updateTotal()">' +
+          '<div><div class="order-item-name">' + item.name + '</div>' +
+          '<div class="order-item-price">₹' + item.price + '</div></div>' +
+          '</label>';
+      }).join('');
+    }
+  } catch(e) { console.error('Menu load error', e); }
+}
+
+// Load menu on page init
+loadMenuItems();
+
+// ── Admin Menu Management ──────────────────────────────────────────────
+async function loadMenuMgmt() {
+  var tbody = document.getElementById('menuMgmtList');
+  if (!tbody) return;
+  var r = await fetch(API_BASE + '/menu/');
+  if (!r.ok) { tbody.innerHTML = '<tr><td colspan="6">Failed to load</td></tr>'; return; }
+  var items = await r.json();
+  if (!items.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--text3)">No items yet</td></tr>'; return; }
+  tbody.innerHTML = items.map(function(item) {
+    return '<tr>' +
+      '<td style="font-size:1.5rem">' + item.icon + '</td>' +
+      '<td><strong>' + item.name + '</strong><div style="font-size:.75rem;color:var(--text3)">' + item.desc + '</div></td>' +
+      '<td>' + item.category + '</td>' +
+      '<td>\u20B9' + item.price + '</td>' +
+      '<td>' +
+        '<label style="display:flex;align-items:center;gap:.4rem;cursor:pointer">' +
+          '<input type="checkbox" ' + (item.available ? 'checked' : '') + ' onchange="toggleMenuAvail(\'' + item.id + '\',this.checked)">' +
+          (item.available ? 'Yes' : 'No') +
+        '</label>' +
+      '</td>' +
+      '<td style="display:flex;gap:.5rem">' +
+        '<button onclick="deleteMenuItem(\'' + item.id + '\',\'' + item.name + '\')" style="background:#fee2e2;color:#dc2626;border:none;padding:.3rem .7rem;cursor:pointer;font-size:.75rem;border-radius:4px">Delete</button>' +
+      '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+async function toggleMenuAvail(id, available) {
+  await api('/menu/' + id + '/', { method: 'PATCH', body: JSON.stringify({ available: available }), headers: { 'Content-Type': 'application/json' } });
+  loadMenuMgmt();
+  loadMenuItems();
+}
+
+async function deleteMenuItem(id, name) {
+  if (!confirm('Delete "' + name + '"?')) return;
+  await api('/menu/' + id + '/', { method: 'DELETE' });
+  loadMenuMgmt();
+  loadMenuItems();
+}
+
+function showAddMenuForm() { document.getElementById('addMenuForm').style.display = ''; }
+function hideAddMenuForm() { document.getElementById('addMenuForm').style.display = 'none'; }
+
+async function addMenuItem() {
+  var name  = document.getElementById('mName').value.trim();
+  var price = document.getElementById('mPrice').value;
+  var desc  = document.getElementById('mDesc').value.trim();
+  var cat   = document.getElementById('mCat').value;
+  var icon  = document.getElementById('mIcon').value.trim() || '☕';
+  if (!name || !price) { alert('Name and price are required'); return; }
+  var r = await api('/menu/', { method: 'POST', body: JSON.stringify({ name, price, desc, category: cat, icon }), headers: { 'Content-Type': 'application/json' } });
+  if (r.ok) {
+    hideAddMenuForm();
+    document.getElementById('mName').value = '';
+    document.getElementById('mPrice').value = '';
+    document.getElementById('mDesc').value = '';
+    document.getElementById('mIcon').value = '';
+    loadMenuMgmt();
+    loadMenuItems();
+  } else { alert('Failed to add item'); }
 }
 </script>
 </body>

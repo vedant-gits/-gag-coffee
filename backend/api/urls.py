@@ -16,4 +16,8 @@ urlpatterns = [
 
     # Admin Stats
     path("admin/stats/",                   views.admin_stats,         name="admin-stats"),
+
+    # Menu
+    path("menu/",                          views.menu,                name="menu"),
+    path("menu/<str:item_id>/",            views.menu_item,           name="menu-item"),
 ]

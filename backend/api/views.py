@@ -111,12 +111,9 @@ def orders(request):
         if errors:
             return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Build total from allowed menu prices
-        PRICES = {
-            "The Classic Gag": 180, "Matcha Mess": 240, "Honey Drift": 260,
-            "Spice Riot": 210, "Vietnamese Cold": 220, "Almond Croissant": 120,
-            "Dark Ganache": 150,
-        }
+        # Build total from DB menu prices
+        _seed_menu()
+        PRICES = {m["name"]: m["price"] for m in db.menu.find({"available": True})}
         total = sum(PRICES.get(i, 0) for i in items)
 
         doc = {
@@ -299,3 +296,98 @@ def admin_stats(request):
         "unread_messages": db.contacts.count_documents({"read": False}),
         "recent_orders":   recent,
     })
+
+
+# ── Default menu items (seeded if DB is empty) ─────────────────────────────────
+DEFAULT_MENU = [
+    {"name": "The Classic Gag",  "desc": "Double shot espresso, dark roast, intense and unapologetic", "price": 180, "category": "coffee", "icon": "🖤",  "available": True},
+    {"name": "Matcha Mess",      "desc": "Ceremonial matcha, oat milk, a little chaos in a cup",       "price": 240, "category": "coffee", "icon": "🌿",  "available": True},
+    {"name": "Honey Drift",      "desc": "Cold brew, local honey, a cloud of cream on top",             "price": 260, "category": "cold",   "icon": "🍯",  "available": True},
+    {"name": "Spice Riot",       "desc": "Masala espresso, cardamom, ginger — a desi twist",            "price": 210, "category": "coffee", "icon": "🌶️", "available": True},
+    {"name": "Vietnamese Cold",  "desc": "Slow-drip Vietnamese coffee over ice, bold and sweet",        "price": 220, "category": "cold",   "icon": "🧊",  "available": True},
+    {"name": "Almond Croissant", "desc": "Buttery, flaky, mouth-melting — the perfect companion",       "price": 120, "category": "food",   "icon": "🥐",  "available": True},
+    {"name": "Dark Ganache",     "desc": "Rich authentic chocolate ganache, intensely smooth",           "price": 150, "category": "food",   "icon": "🍫",  "available": True},
+]
+
+
+def _seed_menu():
+    """Seed default menu if collection is empty."""
+    if db.menu.count_documents({}) == 0:
+        db.menu.insert_many(DEFAULT_MENU)
+
+
+def _fmt_menu(item):
+    return {
+        "id":        str(item["_id"]),
+        "name":      item.get("name", ""),
+        "desc":      item.get("desc", ""),
+        "price":     item.get("price", 0),
+        "category":  item.get("category", "coffee"),
+        "icon":      item.get("icon", "☕"),
+        "available": item.get("available", True),
+    }
+
+
+@api_view(["GET", "POST"])
+@permission_classes([AllowAny])
+def menu(request):
+    _seed_menu()
+
+    if request.method == "GET":
+        items = [_fmt_menu(i) for i in db.menu.find({})]
+        return Response(items)
+
+    # POST — admin only
+    if not request.user.is_staff:
+        return Response({"error": "Admin only."}, status=status.HTTP_403_FORBIDDEN)
+
+    d = request.data
+    if not d.get("name") or not d.get("price"):
+        return Response({"error": "name and price are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    item = {
+        "name":      d["name"].strip(),
+        "desc":      d.get("desc", "").strip(),
+        "price":     int(d["price"]),
+        "category":  d.get("category", "coffee"),
+        "icon":      d.get("icon", "☕"),
+        "available": d.get("available", True),
+    }
+    result = db.menu.insert_one(item)
+    item["id"] = str(result.inserted_id)
+    return Response(item, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET", "PATCH", "DELETE"])
+@permission_classes([AllowAny])
+def menu_item(request, item_id):
+    try:
+        obj = db.menu.find_one({"_id": ObjectId(item_id)})
+    except Exception:
+        obj = None
+    if not obj:
+        return Response({"error": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        return Response(_fmt_menu(obj))
+
+    # PATCH / DELETE — admin only
+    if not request.user.is_staff:
+        return Response({"error": "Admin only."}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == "DELETE":
+        db.menu.delete_one({"_id": ObjectId(item_id)})
+        return Response({"message": "Deleted."})
+
+    # PATCH
+    d = request.data
+    update = {}
+    if "name"      in d: update["name"]      = d["name"].strip()
+    if "desc"      in d: update["desc"]       = d["desc"].strip()
+    if "price"     in d: update["price"]      = int(d["price"])
+    if "category"  in d: update["category"]   = d["category"]
+    if "icon"      in d: update["icon"]        = d["icon"]
+    if "available" in d: update["available"]   = bool(d["available"])
+    db.menu.update_one({"_id": ObjectId(item_id)}, {"$set": update})
+    updated = db.menu.find_one({"_id": ObjectId(item_id)})
+    return Response(_fmt_menu(updated))
