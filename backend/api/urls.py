@@ -20,4 +20,7 @@ urlpatterns = [
     # Menu
     path("menu/",                          views.menu,                name="menu"),
     path("menu/<str:item_id>/",            views.menu_item,           name="menu-item"),
+
+    # Order tracking (public)
+    path("orders/track/<str:order_id>/",   views.track_order,         name="track-order"),
 ]

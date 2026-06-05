@@ -147,6 +147,17 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
 .btn-wa-order:hover{background:#1da851}
 .error-msg{color:var(--red);font-size:.78rem;display:none;margin-bottom:1rem;padding:.55rem .9rem;background:var(--red-bg);border-left:3px solid var(--red)}
 .order-success{display:none;text-align:center;padding:2.5rem 1rem}
+.order-tracker{margin-top:1.5rem;text-align:left}
+.tracker-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:1.5rem;flex-wrap:wrap}
+.tracker-step{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;min-width:70px;position:relative}
+.tracker-step:not(:last-child)::after{content:'';position:absolute;top:16px;left:60%;width:80%;height:2px;background:var(--cream3);z-index:0}
+.tracker-step.done::after{background:var(--gold)}
+.tracker-dot{width:32px;height:32px;border-radius:50%;background:var(--cream3);display:flex;align-items:center;justify-content:center;font-size:.9rem;position:relative;z-index:1;transition:all .3s}
+.tracker-step.done .tracker-dot{background:var(--gold);color:#fff}
+.tracker-step.active .tracker-dot{background:var(--brown3);color:#fff;box-shadow:0 0 0 4px rgba(92,61,30,.15)}
+.tracker-label{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);text-align:center}
+.tracker-step.done .tracker-label,.tracker-step.active .tracker-label{color:var(--brown3)}
+.tracker-order-info{background:var(--cream2);padding:1rem 1.25rem;border:1px solid var(--cream3);font-size:.82rem;color:var(--text2);line-height:1.8}
 .big-check{font-size:2.8rem;display:block;margin-bottom:1rem;animation:pop .4s cubic-bezier(.17,.67,.4,1.3)}
 @keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
 .order-success h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--brown3);margin-bottom:.75rem;font-weight:300}
@@ -437,6 +448,16 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
             <span class="big-check">✅</span>
             <h3>Order Confirmed!</h3>
             <p id="orderConfirmMsg"></p>
+            <div class="order-tracker" id="orderTracker" style="display:none">
+              <div class="tracker-steps">
+                <div class="tracker-step" id="tStep0"><div class="tracker-dot">📋</div><div class="tracker-label">Placed</div></div>
+                <div class="tracker-step" id="tStep1"><div class="tracker-dot">✅</div><div class="tracker-label">Confirmed</div></div>
+                <div class="tracker-step" id="tStep2"><div class="tracker-dot">☕</div><div class="tracker-label">Preparing</div></div>
+                <div class="tracker-step" id="tStep3"><div class="tracker-dot">🎉</div><div class="tracker-label">Ready!</div></div>
+              </div>
+              <div class="tracker-order-info" id="trackerOrderInfo"></div>
+              <p id="trackerLastUpdate" style="font-size:.7rem;color:var(--text3);margin-top:.75rem;text-align:center"></p>
+            </div>
             <a id="waFollowup" class="wa-followup" href="#" target="_blank" rel="noopener">💬 Follow up on WhatsApp</a><br>
             <button class="btn btn-outline" onclick="resetOrder()" style="border-color:var(--brown3);color:var(--brown3);margin-top:1rem">Place Another Order</button>
           </div>
@@ -813,17 +834,81 @@ async function submitOrder(mode) {
   }
 }
 
+var _trackerInterval = null;
+var _trackerOrderId = null;
+
+var STATUS_STEPS = {
+  'pending':   0,
+  'confirmed': 1,
+  'ready':     3,
+  'completed': 3,
+  'cancelled': -1
+};
+
+function updateTrackerUI(status, orderData) {
+  var stepIndex = STATUS_STEPS[status] !== undefined ? STATUS_STEPS[status] : 0;
+  for (var i = 0; i <= 3; i++) {
+    var step = document.getElementById('tStep' + i);
+    if (!step) continue;
+    step.classList.remove('done', 'active');
+    if (i < stepIndex) step.classList.add('done');
+    else if (i === stepIndex) step.classList.add('active');
+  }
+  if (orderData) {
+    var items = Array.isArray(orderData.items) ? orderData.items.join(', ') : orderData.items;
+    document.getElementById('trackerOrderInfo').innerHTML =
+      '<strong>Order ID:</strong> ' + orderData.order_id + '<br>' +
+      '<strong>Items:</strong> ' + items + '<br>' +
+      '<strong>Total:</strong> ₹' + orderData.total + '<br>' +
+      '<strong>Status:</strong> ' + status.charAt(0).toUpperCase() + status.slice(1);
+  }
+  var now = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  var el = document.getElementById('trackerLastUpdate');
+  if (el) el.textContent = 'Last updated: ' + now;
+
+  // Stop polling if completed or cancelled
+  if (status === 'completed' || status === 'cancelled') {
+    if (_trackerInterval) { clearInterval(_trackerInterval); _trackerInterval = null; }
+  }
+}
+
+async function pollOrderStatus(orderId) {
+  try {
+    var res = await fetch(API_BASE + '/orders/track/' + orderId + '/');
+    if (!res.ok) return;
+    var data = await res.json();
+    updateTrackerUI(data.status, data);
+  } catch(e) {}
+}
+
+function startOrderTracking(orderId, initialData) {
+  _trackerOrderId = orderId;
+  document.getElementById('orderTracker').style.display = 'block';
+  updateTrackerUI(initialData.status || 'pending', initialData);
+  if (_trackerInterval) clearInterval(_trackerInterval);
+  _trackerInterval = setInterval(function() {
+    pollOrderStatus(_trackerOrderId);
+  }, 10000);
+}
+
 function showOrderSuccess(d, id) {
   document.getElementById('orderForm').style.display = 'none';
   var s = document.getElementById('orderSuccess'); s.style.display = 'block';
   document.getElementById('orderConfirmMsg').textContent =
-    'Thanks ' + d.name + '! Order #' + id + ' — ' + d.items + ' · ₹' + d.total + '. Ready ' + d.time.toLowerCase() + '.';
+    'Thanks ' + d.name + '! Your order is being prepared.';
   var msg = 'Hi! Following up on Order #' + id + ' for ' + d.name;
   document.getElementById('waFollowup').href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
   s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Save to localStorage so tracker survives refresh
+  localStorage.setItem('gag_last_order', JSON.stringify({ order_id: id, items: d.items, total: d.total, status: 'pending' }));
+  // Start live tracker
+  startOrderTracking(id, { order_id: id, items: d.items, total: d.total, status: 'pending' });
 }
 
 function resetOrder() {
+  if (_trackerInterval) { clearInterval(_trackerInterval); _trackerInterval = null; }
+  localStorage.removeItem('gag_last_order');
+  document.getElementById('orderTracker').style.display = 'none';
   document.getElementById('orderForm').style.display = 'block';
   document.getElementById('orderSuccess').style.display = 'none';
   ['orderName', 'orderPhone', 'orderNote'].forEach(function(id) { document.getElementById(id).value = ''; });
@@ -1103,6 +1188,24 @@ async function loadMenuItems() {
 
 // Load menu on page init
 loadMenuItems();
+
+// Restore order tracker from localStorage on page load
+(function restoreOrderTracker() {
+  var saved = localStorage.getItem('gag_last_order');
+  if (!saved) return;
+  try {
+    var order = JSON.parse(saved);
+    if (!order.order_id) return;
+    // Show the order page and tracker
+    navigate('order');
+    document.getElementById('orderForm').style.display = 'none';
+    document.getElementById('orderSuccess').style.display = 'block';
+    document.getElementById('orderConfirmMsg').textContent = 'Tracking your order...';
+    startOrderTracking(order.order_id, order);
+    // Also fetch latest status immediately
+    pollOrderStatus(order.order_id);
+  } catch(e) { localStorage.removeItem('gag_last_order'); }
+})();
 
 // ── Admin Menu Management ──────────────────────────────────────────────
 async function loadMenuMgmt() {

@@ -391,3 +391,20 @@ def menu_item(request, item_id):
     db.menu.update_one({"_id": ObjectId(item_id)}, {"$set": update})
     updated = db.menu.find_one({"_id": ObjectId(item_id)})
     return Response(_fmt_menu(updated))
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def track_order(request, order_id):
+    """Public endpoint for customers to track their order status."""
+    order = db.orders.find_one({"order_id": order_id})
+    if not order:
+        return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+    return Response({
+        "order_id":    order.get("order_id"),
+        "name":        order.get("name"),
+        "items":       order.get("items", []),
+        "total":       order.get("total"),
+        "status":      order.get("status", "pending"),
+        "pickup_time": order.get("pickup_time"),
+    })
