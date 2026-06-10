@@ -352,7 +352,6 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
     <div class="nav-item" data-page="reviews"><span class="nav-item-icon">⭐</span> Reviews</div>
     <div class="nav-item" data-page="about"><span class="nav-item-icon">☘️</span> About Us</div>
     <div class="nav-item" data-page="contact"><span class="nav-item-icon">📍</span> Contact & Map</div>
-    <div class="nav-item" data-page="myorders"><span class="nav-item-icon">👤</span> My Orders</div>
     <div class="nav-item" data-page="admin"><span class="nav-item-icon">🔐</span> Admin</div>
   </nav>
   <div class="sidebar-footer">
@@ -581,28 +580,6 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);dis
   </div>
 
   <!-- ADMIN -->
-  <div class="page" id="page-myorders">
-    <div class="page-header"><h2 class="page-title">My <em>Orders</em></h2></div>
-    <div style="max-width:500px;margin:0 auto">
-      <div id="myOrdersLogin" style="background:var(--cream2);border:1px solid var(--cream3);padding:2rem;text-align:center">
-        <p style="color:var(--text2);margin-bottom:1.25rem;font-size:.88rem">Enter your phone number to see your orders</p>
-        <div class="form-group" style="margin-bottom:1rem">
-          <input type="tel" id="myOrdersPhone" placeholder="10-digit phone number" maxlength="10"
-            style="width:100%;padding:.75rem;border:1px solid var(--cream3);background:var(--cream);font-family:'Jost',sans-serif;font-size:1rem;text-align:center;letter-spacing:2px">
-        </div>
-        <button class="btn btn-dark" onclick="loadMyOrders()" style="width:100%">View My Orders</button>
-        <p id="myOrdersError" style="color:#c0392b;font-size:.78rem;margin-top:.75rem;display:none"></p>
-      </div>
-      <div id="myOrdersResult" style="display:none;margin-top:1.5rem">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-          <span id="myOrdersPhoneLabel" style="font-size:.8rem;color:var(--text3)"></span>
-          <button onclick="logoutMyOrders()" style="font-size:.72rem;color:var(--text3);background:none;border:none;cursor:pointer;text-decoration:underline">Change</button>
-        </div>
-        <div id="myOrdersList"></div>
-      </div>
-    </div>
-  </div>
-
   <div class="page" id="page-admin">
     <!-- Login -->
     <div class="admin-login-wrap" id="adminLoginWrap">
@@ -1015,7 +992,7 @@ var adminRefreshInterval = null;
 async function loadAdminData() {
   loadAdminStats();
   loadOrders();
-  // Start auto-refresh every 2 seconds
+  // Start auto-refresh every 15 seconds
   if (adminRefreshInterval) clearInterval(adminRefreshInterval);
   adminRefreshInterval = setInterval(function() {
     if (adminToken) {
@@ -1280,80 +1257,7 @@ showOrderSuccess = function(d, id) {
   _origShowOrderSuccess(d, id);
 };
 
-// Render my orders when page is visited
-var _origNavigate = navigate;
-navigate = function(pageId) {
-  _origNavigate(pageId);
-  if (pageId === 'myorders') restoreMyOrders();
-};
 
-// ── My Orders (phone login) ────────────────────────────────────────────────
-function restoreMyOrders() {
-  var saved = localStorage.getItem('gag_my_phone');
-  if (saved) {
-    document.getElementById('myOrdersPhone').value = saved;
-    loadMyOrders();
-  }
-}
-
-async function loadMyOrders() {
-  var phone = document.getElementById('myOrdersPhone').value.trim();
-  var err = document.getElementById('myOrdersError');
-  err.style.display = 'none';
-  if (!phone || phone.length < 10) {
-    err.textContent = 'Please enter a valid 10-digit phone number.';
-    err.style.display = 'block';
-    return;
-  }
-  var btn = document.querySelector('#myOrdersLogin .btn-dark');
-  btn.textContent = 'Loading...';
-  btn.disabled = true;
-  try {
-    var res = await fetch(API_BASE + '/orders/by-phone/?phone=' + phone);
-    var orders = await res.json();
-    localStorage.setItem('gag_my_phone', phone);
-    document.getElementById('myOrdersLogin').style.display = 'none';
-    document.getElementById('myOrdersResult').style.display = 'block';
-    document.getElementById('myOrdersPhoneLabel').textContent = '📱 ' + phone;
-    renderMyOrdersList(orders);
-  } catch(e) {
-    err.textContent = 'Could not load orders. Try again.';
-    err.style.display = 'block';
-  }
-  btn.textContent = 'View My Orders';
-  btn.disabled = false;
-}
-
-function renderMyOrdersList(orders) {
-  var list = document.getElementById('myOrdersList');
-  if (!orders.length) {
-    list.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text3)">No orders found for this number.</div>';
-    return;
-  }
-  var statusColor = { pending:'#b87c00', confirmed:'#1d6fa4', ready:'#25D366', completed:'#4caf50', cancelled:'#dc2626' };
-  list.innerHTML = orders.map(function(order) {
-    var items = Array.isArray(order.items) ? order.items.join(', ') : order.items;
-    var color = statusColor[order.status] || '#888';
-    var date = order.created_at ? new Date(order.created_at).toLocaleString('en-IN', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
-    return '<div style="background:var(--cream2);border:1px solid var(--cream3);padding:1.25rem 1.5rem;margin-bottom:1rem">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">' +
-        '<strong style="font-size:.9rem;color:var(--brown3)">' + order.order_id + '</strong>' +
-        '<span style="font-size:.72rem;background:' + color + '20;color:' + color + ';padding:.2rem .7rem;border-radius:20px;font-weight:600;letter-spacing:1px;text-transform:uppercase">' + (order.status || 'pending') + '</span>' +
-      '</div>' +
-      '<div style="font-size:.82rem;color:var(--text2);margin-bottom:.35rem">' + items + '</div>' +
-      '<div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--text3)">' +
-        '<span>₹' + order.total + '</span><span>' + date + '</span>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-function logoutMyOrders() {
-  localStorage.removeItem('gag_my_phone');
-  document.getElementById('myOrdersLogin').style.display = 'block';
-  document.getElementById('myOrdersResult').style.display = 'none';
-  document.getElementById('myOrdersPhone').value = '';
-}
 
 // Restore order tracker from localStorage on page load
 (function restoreOrderTracker() {
