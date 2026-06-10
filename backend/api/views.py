@@ -22,7 +22,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -408,3 +408,15 @@ def track_order(request, order_id):
         "status":      order.get("status", "pending"),
         "pickup_time": order.get("pickup_time"),
     })
+
+
+@api_view(["GET"])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def orders_by_phone(request):
+    """Public endpoint — fetch orders by phone number."""
+    phone = request.query_params.get("phone", "").strip()
+    if not phone or len(phone) < 10:
+        return Response({"error": "Valid phone number required."}, status=status.HTTP_400_BAD_REQUEST)
+    orders = list(db.orders.find({"phone": phone}).sort("created_at", -1).limit(20))
+    return Response([_fmt(o) for o in orders])

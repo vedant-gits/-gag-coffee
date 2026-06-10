@@ -23,4 +23,7 @@ urlpatterns = [
 
     # Order tracking (public)
     path("orders/track/<str:order_id>/",   views.track_order,         name="track-order"),
+
+    # Orders by phone (public)
+    path("orders/by-phone/",               views.orders_by_phone,     name="orders-by-phone"),
 ]
