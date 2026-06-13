@@ -31,6 +31,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
     "https://*.vercel.app",
     "https://*.up.railway.app",
+    "https://*.onrender.com",
 ]
 
 # ── Apps ──────────────────────────────────────────────────────────────────────
