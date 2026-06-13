@@ -20,7 +20,12 @@ ALLOWED_HOSTS = env.list(
     default=["localhost", "127.0.0.1", "0.0.0.0"],
 )
 # Allow all Railway and Vercel domains
-ALLOWED_HOSTS += [".railway.app", ".vercel.app", ".up.railway.app"]
+ALLOWED_HOSTS += [
+    ".railway.app",
+    ".vercel.app",
+    ".up.railway.app",
+    ".onrender.com",
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
